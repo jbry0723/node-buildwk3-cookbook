@@ -2,6 +2,14 @@ const { table } = require("../db-config");
 
 exports.up = function (knex) {
   return knex.schema
+  .createTable("sources", (tbl) => {
+    tbl.increments("source_id")
+    tbl.string("source_name", 255).notNullable().unique();
+  })
+  .createTable("categories", (tbl) => {
+    tbl.increments("category_id")
+    tbl.string("category_name", 255).notNullable().unique();
+  })
     .createTable("recipes", (tbl) => {
       tbl.increments("recipe_id");
       tbl.string("recipe_name", 128).notNullable();
@@ -24,7 +32,7 @@ exports.up = function (knex) {
       tbl.string("ingredient_name", 128).notNullable();
     })
     .createTable("recipe_ingredients", (tbl) => {
-      tbl.primary(["recipe_id","ingredient_id"]);
+      tbl.primary(["recipe_id", "ingredient_id"]);
       tbl
         .integer("recipe_id")
         .unsigned()
@@ -59,14 +67,6 @@ exports.up = function (knex) {
       tbl.string("username", 255).notNullable().unique();
       tbl.string("password", 255).notNullable();
     })
-    .createTable("sources", (tbl) => {
-      tbl.increments("source_id");
-      tbl.string("source_name", 255).notNullable().unique();
-    })
-    .createTable("categories", (tbl) => {
-      tbl.increments("category_id");
-      tbl.string("category_name", 255).notNullable().unique();
-    })
     .createTable("users_recipes", (tbl) => {
       tbl.primary(["user_id", "recipe_id"]);
       tbl
@@ -83,17 +83,18 @@ exports.up = function (knex) {
         .references("recipe_id")
         .inTable("recipes")
         .onDelete("CASCADE");
-    });
+    })
+  
 };
 
 exports.down = function (knex) {
   return knex.schema
+    .dropTableIfExists("users_recipes")
+    .dropTableIfExists("users")
     .dropTableIfExists("instructions")
-    .dropTableIfExists("ingredients_lists")
+    .dropTableIfExists("recipe_ingredients")
     .dropTableIfExists("ingredients")
     .dropTableIfExists("recipes")
-    .dropTableIfExists("users")
-    .dropTableIfExists("sources")
     .dropTableIfExists("categories")
-    .dropTableIfExists("users_recipes");
+    .dropTableIfExists("sources")
 };
