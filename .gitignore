@@ -62,3 +62,5 @@ typings/
 
 # Mac Cruft
 .DS_Store
+
+.vscode

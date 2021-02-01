@@ -1,6 +1,7 @@
 const express=require('express');
-const Recipe=require("./recipebook-model")
+const Recipe=require("./recipes-model")
 const router=express.Router();
+const {handleErrors}=require("../middleware/router-middleware")
 
 router.get('/', (req,res,next)=>{
     Recipe.getRecipes()
@@ -28,10 +29,6 @@ router.get('/:id/instructions', (req,res,next)=>{
 
 
 
-router.use((error, req, res, next)=>{
-    res.status(500).json({ info: 'There was an error in the router',
-  message: error.message,
-  stack: error.stack})
-  })
+router.use(handleErrors)
 
 module.exports=router

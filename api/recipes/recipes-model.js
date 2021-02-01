@@ -1,4 +1,4 @@
-const db = require('../../data/db-config');
+const db = require('../../config/db-config');
 
 
 module.exports = {
@@ -14,7 +14,7 @@ function getRecipes(){
 
 
 function getShoppingList(recipe_id){
-    return db('ingredients_lists as il')
+    return db('recipe_ingredients as il')
     .leftJoin('ingredients as i','il.ingredient_id','i.ingredient_id')
     .select('i.ingredient_name', 'il.quantity', 'il.quantity_units')
     .where('il.recipe_id', recipe_id)
