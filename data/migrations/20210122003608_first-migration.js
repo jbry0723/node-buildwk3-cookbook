@@ -39,7 +39,7 @@ exports.up = function (knex) {
         .onDelete("CASCADE");
       tbl.string("img_url", 240);
       tbl
-        .integer("user_id")
+        .integer("creator_id")
         .unsigned()
         .references("user_id")
         .inTable("users")
