@@ -12,13 +12,18 @@ if (process.env.DATABASE_URL) {
 }
 
 const sharedConfig = {
-  client: "pg",
-  connection,
+  
   migrations: { directory: "./data/migrations" },
   seeds: { directory: "./data/seeds" },
+  pool: {
+    afterCreate: (conn, done) => {
+      conn.run("PRAGMA foreign_keys = ON", done);
+    },
+  }
 };
 
 module.exports = {
-  development: { ...sharedConfig },
-  production: { ...sharedConfig, pool: { min: 2, max: 10 } },
+  development: { client:"sqlite3",useNullAsDefault: true, connection: "./data/recipebook.db3",...sharedConfig },
+  production: { ...sharedConfig,client: "pg",
+  connection, pool: { min: 2, max: 10 } },
 };

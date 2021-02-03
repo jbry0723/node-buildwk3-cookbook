@@ -2,10 +2,6 @@ const { table } = require("../db-config");
 
 exports.up = function (knex) {
   return knex.schema
-    .createTable("sources", (tbl) => {
-      tbl.increments("source_id");
-      tbl.string("source_name", 255).notNullable().unique();
-    })
     .createTable("categories", (tbl) => {
       tbl.increments("category_id");
       tbl.string("category_name", 255).notNullable().unique();
@@ -25,12 +21,7 @@ exports.up = function (knex) {
     .createTable("recipes", (tbl) => {
       tbl.increments("recipe_id");
       tbl.string("recipe_name", 128).notNullable();
-      tbl
-        .integer("source_id")
-        .unsigned()
-        .references("source_id")
-        .inTable("sources")
-        .onDelete("CASCADE");
+      tbl.string("source_name", 255)
       tbl
         .integer("category_id")
         .unsigned()
@@ -57,25 +48,8 @@ exports.up = function (knex) {
       tbl.string("instruction_text", 600).notNullable();
       tbl.integer("step_number").unsigned().notNullable();
     })
-    .createTable("users_recipes", (tbl) => {
-      tbl.primary(["user_id", "recipe_id"]);
-      tbl
-        .integer("user_id")
-        .unsigned()
-        .notNullable()
-        .references("user_id")
-        .inTable("users")
-        .onDelete("CASCADE");
-      tbl
-        .integer("recipe_id")
-        .unsigned()
-        .notNullable()
-        .references("recipe_id")
-        .inTable("recipes")
-        .onDelete("CASCADE");
-    })
     .createTable("recipe_ingredients", (tbl) => {
-      tbl.primary(["recipe_id", "ingredient_id"]);
+      tbl.primary(["recipe_id", "ingredient_id"]); 
       tbl
         .integer("recipe_id")
         .unsigned()
@@ -97,12 +71,10 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return knex.schema
-  .dropTableIfExists("recipe_ingredients")
-    .dropTableIfExists("users_recipes")
+    .dropTableIfExists("recipe_ingredients")
     .dropTableIfExists("instructions")
     .dropTableIfExists("recipes")
     .dropTableIfExists("users")
     .dropTableIfExists("ingredients")
-    .dropTableIfExists("categories")
-    .dropTableIfExists("sources");
+    .dropTableIfExists("categories");
 };

@@ -3,8 +3,9 @@ const {jwtSecret}=require('../../config/secret')
 
 function generateToken(user) {
     const payload = {
-      subject: user.id,
+      subject: user.user_id,
       username: user.username,
+      
     };
     const options = {
       expiresIn: "1d",
@@ -27,5 +28,6 @@ function generateToken(user) {
       res.status(401).json("token required");
     }
   }
+  
 
   module.exports={restrict,generateToken}
