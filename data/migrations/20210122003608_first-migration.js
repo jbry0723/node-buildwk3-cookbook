@@ -47,6 +47,7 @@ exports.up = function (knex) {
         .onDelete("CASCADE");
       tbl.string("instruction_text", 600).notNullable();
       tbl.integer("step_number").unsigned().notNullable();
+      tbl.unique(['step_number', 'recipe_id'])
     })
     .createTable("recipe_ingredients", (tbl) => {
       tbl.primary(["recipe_id", "ingredient_id"]); 

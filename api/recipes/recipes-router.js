@@ -1,5 +1,7 @@
 const express = require("express");
 const Recipe = require("./recipes-model");
+const Instructions=require('../instructions/instructions-model')
+const Ingredients=require("../ingredients/ingredients-model")
 const router = express.Router();
 const { handleErrors } = require("../middleware/router-middleware");
 const { restrict } = require("../middleware/auth-middleware");
@@ -18,8 +20,8 @@ router.get("/:id", async (req, res, next) => {
     let recipe = await Recipe.getRecipe(req.params.id);
     if (!recipe){res.status(404).json({ message: `Could not find recipe with id of ${req.params.id}` })}
     else{
-    let instructionsList = await Recipe.getInstructions(req.params.id);
-    const ingredientsList = await Recipe.getIngredientsList(req.params.id);
+    let instructionsList = await Instructions.getInstructions(req.params.id);
+    const ingredientsList = await Ingredients.getIngredientsList(req.params.id);
     recipe.instructions = instructionsList;
     recipe.ingredients = ingredientsList;
 
